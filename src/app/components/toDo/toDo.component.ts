@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './toDo.component.html',
   styleUrl: './toDo.component.css'
@@ -18,6 +18,7 @@ export class ToDoComponent implements OnInit {
   tasks: Array<string> = []
   editedTask: string = ''
   isEditting: boolean = false
+  taskEditIndex: number = 0
 
   constructor() { }
 
@@ -37,23 +38,22 @@ export class ToDoComponent implements OnInit {
 
   removeTask(i: number) {
     this.tasks.splice(i, 1)
-    localStorage.setItem('tasks',JSON.stringify(this.tasks))
+    localStorage.setItem('tasks', JSON.stringify(this.tasks))
   }
 
-  editTask(task: string,e:Event) {
+  editTask(task: string, i: number) {
     this.isEditting = true
     this.newTask = task;
     (document.querySelector('.form-control') as HTMLInputElement).focus();
-    (document.querySelector('.addTask') as HTMLButtonElement).disabled = true;
+    this.taskEditIndex = i
 
   }
 
-  updateTask(i: number, edittedTask: string) {
-    (document.querySelector('.addTask') as HTMLButtonElement).disabled = false;
+  updateTask(edittedTask: string) {
     this.isEditting = false
-    this.tasks[i] = edittedTask
+    this.tasks[this.taskEditIndex] = edittedTask
     this.newTask = ''
-    localStorage.setItem('tasks',JSON.stringify(this.tasks))
+    localStorage.setItem('tasks', JSON.stringify(this.tasks))
 
   }
 }
